@@ -10,34 +10,44 @@ class Gameboard
     @code_maker = code_maker
     @code_breaker = code_breaker
 
-    @used_indexes = []
     @secret_code = []
     @feedback = []
-    @board = []
   end
 
   def start_game
     init_code
     loop do
       make_guess
-      break if gameover?
+      if gameover?
+        puts 'GG'
+        break
       end
     end
+
     handle_end
   end
 
   private
+
+  def handle_end
+    if code_broken?
+      puts "Congrts, #{@code_breaker} won in #{@turns_played} turns!"
+    elsif @turns_played == TURNS
+      puts "Congrats, #{@code_maker} won!"
+    end
+  end
+
   def init_code
     @secret_code = @code_maker.generate_code(OPTIONS)
     p @secret_code
   end
 
-  def code_broken?
+  def wins?
     @feedback.all?('black') && @feedback.length == @secret_code.length
   end
 
   def gameover?
-    code_broken? || @turns_played == TURNS
+    wins? || @turns_played == TURNS
   end
 
   def make_guess
@@ -49,4 +59,3 @@ class Gameboard
     @feedback.shuffle!.compact!
   end
 end
- 
