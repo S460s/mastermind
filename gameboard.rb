@@ -16,10 +16,10 @@ class Gameboard
 
   def start_game
     init_code
-    p @secret_code
 
     loop do
       make_guess
+      p @feedback
       break if gameover?
     end
 
@@ -35,6 +35,25 @@ class Gameboard
     else
       puts "Congrats, #{@code_maker} won!"
     end
+    play_again
+  end
+
+  def play_again
+    puts 'Play again? (y/n)'
+    ans = gets.chomp
+
+    if ans == 'y'
+      puts 'Switching code maker and breaker!'
+      reset_game
+    else
+      puts 'Thanks for playing!'
+    end
+  end
+
+  def reset_game
+    @code_breaker, @code_maker = @code_maker, @code_breaker
+    @turns_played = 0
+    start_game
   end
 
   def init_code
