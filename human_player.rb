@@ -4,17 +4,25 @@ require_relative 'player'
 
 # A computer player which will generate outputs.
 class HumanPlayer < Player
-  def generate_code(options); end
+  def generate_code(options)
+    puts "Choose 4 of these colors to make the secret code (can't repeat colors)"
+    code_input(options)
+  end
 
   def guess(options)
-    p options
     puts 'Make a guess by entering 4 colors separated by spaces (" ")'
+    code_input(options)
+  end
 
-    # No check if user inputs 2 or mre same colors
-    choice = gets.chomp.split
-    return choice if choice.intersection(options).length == 4
+  private
+
+  def code_input(options)
+    p options
+    code = gets.chomp.split
+    return code if code.intersection(options).length == 4
 
     puts 'Invalid input. Please try again!'
-    guess(options)
+
+    code_input(options)
   end
 end
