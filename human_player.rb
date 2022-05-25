@@ -10,7 +10,11 @@ class HumanPlayer < Player
     p options
     puts 'Make a guess by entering 4 colors separated by spaces (" ")'
 
-    # add logic to validate input
-    gets.chomp.split
+    # No check if user inputs 2 or mre same colors
+    choice = gets.chomp.split
+    return choice if choice.intersection(options).length == 4
+
+    puts 'Invalid input. Please try again!'
+    guess(options)
   end
 end
