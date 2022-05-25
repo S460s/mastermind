@@ -16,12 +16,11 @@ class Gameboard
 
   def start_game
     init_code
+    p @secret_code
+
     loop do
       make_guess
-      if gameover?
-        puts 'GG'
-        break
-      end
+      break if gameover?
     end
 
     handle_end
@@ -30,27 +29,28 @@ class Gameboard
   private
 
   def handle_end
+    puts 'GG'
     if code_broken?
       puts "Congrts, #{@code_breaker} won in #{@turns_played} turns!"
-    elsif @turns_played == TURNS
+    else
       puts "Congrats, #{@code_maker} won!"
     end
   end
 
   def init_code
     @secret_code = @code_maker.generate_code(OPTIONS)
-    p @secret_code
   end
 
-  def wins?
+  def code_broken?
     @feedback.all?('black') && @feedback.length == @secret_code.length
   end
 
   def gameover?
-    wins? || @turns_played == TURNS
+    code_broken? || @turns_played == TURNS
   end
 
   def make_guess
+    @turns_played += 1
     @feedback = @code_breaker.guess(OPTIONS).map.with_index do |value, index|
       if @secret_code.include?(value)
         @secret_code[index] == value ? 'black' : 'white'
